@@ -1,3 +1,7 @@
 ## Vim
 *.swp
 *.swo
+
+## Node JS
+node_modules
+typescript/targets
