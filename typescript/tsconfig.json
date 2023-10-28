@@ -1,0 +1,10 @@
+{
+	"comments": ["This file is intended for use by IDEs"],
+	"extends": ".config/tsc/tsconfig.base.json",
+	"include": ["src/**/*", "@types/**/*"],
+	"exclude": [],
+	"compilerOptions": {
+		"target": "esnext",
+		"allowSyntheticDefaultImports": true
+	}
+}

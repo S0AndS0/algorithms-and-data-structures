@@ -1,0 +1,20 @@
+{
+	"comments": ["This file is intended for use by IDEs and CI/CD servers"],
+	"compilerOptions": {
+		"target": "esnext",
+		"lib": ["dom", "dom.iterable", "es2021"],
+		"sourceMap": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"noImplicitAny": true,
+		"removeComments": true,
+		"experimentalDecorators": true,
+		"skipLibCheck": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+    "rootDir": "../../src"
+	}
+}
