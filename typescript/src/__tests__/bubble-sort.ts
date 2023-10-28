@@ -1,8 +1,5 @@
 // vim: noexpandtab
 
-// import { describe, it } from 'node:test';
-// import assert from 'node:assert';
-
 import { bubbleSort } from '../bubble-sort/bubble-sort.js';
 
 describe('Test bubble sort', () => {
@@ -14,7 +11,6 @@ describe('Test bubble sort', () => {
 			expectedArray,
 		});
 
-		// assert.deepEqual(bubbleSort(unorderdArray), expectedArray, 'Failed to sort');
 		expect(bubbleSort(unorderdArray)).toStrictEqual(expectedArray);
 	});
 });
