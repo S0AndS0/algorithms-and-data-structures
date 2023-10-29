@@ -18,6 +18,20 @@ func Test_Enqueue_increments_length(t *testing.T) {
 	}
 }
 
+func Test_Deque_returns_error_for_empty_queue(t *testing.T) {
+	queue := Queue[uint]{}
+
+	value, err := queue.Deque()
+	if err == nil {
+		t.Fatalf(`Expected error not nil -> %v`, err)
+	}
+
+	var expected_value uint
+	if value != expected_value {
+		t.Fatalf(`Expected value %v did not match returned value %v`, expected_value, value)
+	}
+}
+
 func Test_Deque_decrements_length_and_returns_values(t *testing.T) {
 	queue := Queue[uint]{}
 
