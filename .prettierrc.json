@@ -13,6 +13,13 @@
 				"tabWidth": 4,
 				"useTabs": false
 			}
+		},
+		{
+			"files": ["**/*.sh"],
+			"options": {
+				"tabWidth": 2,
+				"useTabs": true
+			}
 		}
 	]
 }
