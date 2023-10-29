@@ -16,11 +16,3 @@ export function bubbleSort(array: number[]) {
 	}
 	return array;
 }
-
-const unorderdArray = [1, 3, 2, 7, 4];
-const expectedArray = [1, 2, 3, 4, 7];
-console.log({
-	unorderdArray: [...unorderdArray],
-	sortedArray: bubbleSort(unorderdArray),
-	expectedArray,
-});
