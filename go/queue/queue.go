@@ -52,6 +52,11 @@ func (queue *Queue[T]) Deque() (T, error) {
 /**
  * Returns first value of queue without mutation
  */
-func (queue *Queue[T]) Peek() T {
-	return queue.head.value
+func (queue *Queue[T]) Peek() (T, error) {
+	if queue.Length == 0 {
+		var result T
+		return result, errors.New("Queue is empty")
+	}
+
+	return queue.head.value, nil
 }

@@ -69,8 +69,27 @@ func Test_Peek_returns_expected_value(t *testing.T) {
 
 	queue.Enqueue(value)
 
-	peek := queue.Peek()
+	peek, err := queue.Peek()
+
 	if peek != value {
 		t.Fatalf(`Expected queue value of %v but got %v`, value, peek)
+	}
+
+	if err != nil {
+		t.Fatalf(`Unexpected error %v`, err)
+	}
+}
+
+func Test_Peek_returns_error_for_empty_queue(t *testing.T) {
+	queue := Queue[uint]{}
+
+	value, err := queue.Peek()
+	if err == nil {
+		t.Fatalf(`Expected error not nil -> %v`, err)
+	}
+
+	var expected_value uint
+	if value != expected_value {
+		t.Fatalf(`Expected value %v did not match returned value %v`, expected_value, value)
 	}
 }
