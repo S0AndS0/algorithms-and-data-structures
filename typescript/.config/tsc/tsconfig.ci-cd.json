@@ -2,7 +2,8 @@
 	"comments": ["This file is intended for use by CI/CD servers"],
 	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
-		"outDir": "../../targets/ci-cd/"
+		"outDir": "../../targets/ci-cd/",
+		"removeComments": false
 	},
 	"include": ["../../src", "../../@types/**/*"],
 	"exclude": []
