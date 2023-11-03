@@ -1,6 +1,6 @@
 // vim: noexpandtab
 
-import { twoCrystalBalls } from '../two-crystal-balls.js';
+import { twoCrystalBalls } from '../two-crystal-balls/two-crystal-balls.js';
 
 describe('Test two crystal balls search algorithm', () => {
 	it('Finds the index where values switch to target', () => {
