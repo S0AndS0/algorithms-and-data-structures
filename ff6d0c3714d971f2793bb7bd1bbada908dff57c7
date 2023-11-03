@@ -1,0 +1,27 @@
+Notes for @ThePrimeagen about Doubly Linked List
+
+The content provided on [Frontend Masters][1] is fantastic and
+translating logic to Go lang has been enjoyable but, smoke blowing
+aside, there seems to be an error in the `removeNode` logic for updating
+pointers.  Fixes for [`removeNode`][2] may be reviewed on the GitHubs,
+or applied via the following patch snippet;
+
+```diff
+		if (node.prev) {
+-			node.prev = node.next;
++			node.prev.next = node.next;
+		}
+		if (node.next) {
+-			node.next = node.prev;
++			node.next.prev = node.prev;
+		}
+```
+
+... Also as a bonus the [`getAt`][3] method has been optimized to reduce
+search time by up to one-half :-D
+
+Happy coding y'all!
+
+[1]: https://frontendmasters.com/courses/algorithms/linked-list-remove-get-removeat/
+[2]: https://github.com/S0AndS0/algorithms-and-data-structures/blob/ff6d0c3714d971f2793bb7bd1bbada908dff57c7/typescript/src/doubly-linked-list/doubly-linked-list.ts#L202-L208
+[3]: https://github.com/S0AndS0/algorithms-and-data-structures/blob/ff6d0c3714d971f2793bb7bd1bbada908dff57c7/typescript/src/doubly-linked-list/doubly-linked-list.ts#L238-L240
