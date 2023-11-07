@@ -44,5 +44,7 @@ mkdir "${_name}"
 cd "${_name}"
 
 GO111MODULE=on go mod init "${_name}"
+
+touch "${_name}_test.go"
 ```
 
