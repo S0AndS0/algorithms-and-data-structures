@@ -4,6 +4,7 @@
 	"include": ["src/**/*", "@types/**/*"],
 	"exclude": [],
 	"compilerOptions": {
+		"lib": ["dom", "dom.iterable", "es2021"],
 		"target": "esnext",
 		"allowSyntheticDefaultImports": true
 	}
