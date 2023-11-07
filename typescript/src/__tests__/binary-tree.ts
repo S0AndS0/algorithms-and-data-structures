@@ -159,9 +159,17 @@ describe('Test binary tree node', () => {
 		expect(result).toStrictEqual(expected);
 	});
 
-	it('BTNode.fromObject -- Resurects pickled data', () => {
+	it('BTNode.fromObject -- Resurrects pickled data of complete tree', () => {
 		const object = { item: 5, children: { left: { item: 3 }, right: { item: 69 } } };
 		const nodes = BTNode.fromObject(object);
+		expect(nodes.toObject()).toStrictEqual(object);
+	});
+
+	it('BTNode.fromObject -- Resurrects pickled data of incomplete tree', () => {
+		const object = { item: 5, children: { left: { item: 3 }, right: {} } };
+		const nodes = BTNode.fromObject(object);
+		/* @ts-ignore next */
+		delete object.children.right;
 		expect(nodes.toObject()).toStrictEqual(object);
 	});
 
