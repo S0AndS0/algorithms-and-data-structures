@@ -1,0 +1,29 @@
+on:
+  push:
+    paths:
+      - 'go/**/*.go'
+      - '.github/workflows/test-go.yml'
+
+jobs:
+  test-go:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [ '1.21.3' ]
+
+    steps:
+      - name: Checkout source Git branch
+        uses: actions/checkout@v4
+        with:
+            ref: main
+            fetch-depth: 10
+            submodules: true
+
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Test and collect Go code coverage
+        run: go/scripts/test-all.sh -cover
+

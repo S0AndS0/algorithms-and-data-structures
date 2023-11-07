@@ -1,0 +1,37 @@
+on:
+  push:
+    paths:
+      - 'typescript/src/**/*.ts'
+      - '.github/workflows/test-node.yml'
+
+jobs:
+  test-node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ '18.x' ]
+
+    steps:
+      - name: Checkout source Git branch
+        uses: actions/checkout@v4
+        with:
+            ref: main
+            fetch-depth: 10
+            submodules: true
+
+      - name: Setup Go ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install development dependencies
+        run: |
+          pushd typescript
+          npm install
+
+      - name: Test and collect NodeJS code coverage
+        run: |
+          pushd typescript
+          npm run ci:build
+          npm run ci:test
+
