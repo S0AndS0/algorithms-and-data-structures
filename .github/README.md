@@ -7,7 +7,7 @@
 Algorithms and data structures implemented in various languages
 
 
-## [![Byte size of Algorithms And Data Structures][badge__main__algorithms_and_data_structures__source_code]][algorithms_and_data_structures__main__source_code] [![Open Issues][badge__issues__algorithms_and_data_structures]][issues__algorithms_and_data_structures] [![Open Pull Requests][badge__pull_requests__algorithms_and_data_structures]][pull_requests__algorithms_and_data_structures] [![Latest commits][badge__commits__algorithms_and_data_structures__main]][commits__algorithms_and_data_structures__main]   [![GitHub Actions Build Status][badge__github_actions]][activity_log__github_actions] [![License][badge__license]][branch__current__license]
+## [![Byte size of Algorithms And Data Structures][badge__main__algorithms_and_data_structures__source_code]][algorithms_and_data_structures__main__source_code] [![Open Issues][badge__issues__algorithms_and_data_structures]][issues__algorithms_and_data_structures] [![Open Pull Requests][badge__pull_requests__algorithms_and_data_structures]][pull_requests__algorithms_and_data_structures] [![Latest commits][badge__commits__algorithms_and_data_structures__main]][commits__algorithms_and_data_structures__main] [![GitHub Actions Go Tests][badge__github_actions_go]][activity_log__github_actions] [![GitHub Actions Node Tests][badge__github_actions_node]][activity_log__github_actions] [![License][badge__license]][branch__current__license]
 
 
 ---
@@ -273,8 +273,11 @@ For further details review full length version of
   https://liberapay.com/S0AndS0
   "&#x1F4B1; Sponsor developments and projects that S0AndS0 maintains via Liberapay"
 
-[badge__github_actions]:
-  https://github.com/S0AndS0/algorithms-and-data-structures/actions/workflows/test.yaml/badge.svg?branch=main
+[badge__github_actions_go]:
+  https://github.com/S0AndS0/algorithms-and-data-structures/actions/workflows/test-go.yml/badge.svg?branch=main
+
+[badge__github_actions_node]:
+  https://github.com/S0AndS0/algorithms-and-data-structures/actions/workflows/test-node.yml/badge.svg?branch=main
 
 [activity_log__github_actions]:
   https://github.com/S0AndS0/algorithms-and-data-structures/deployments/activity_log
