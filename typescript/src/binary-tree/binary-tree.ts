@@ -33,66 +33,6 @@ export class BTNode<T> {
 	}
 
 	/**
-	 * Set child node pointer and value and return pointer to parent
-	 *
-	 * @template T
-	 * @param {Object} o
-	 * @param {string} o.label
-	 * @param {T|BTNode<T>} o.item
-	 * @returns {this}
-	 *
-	 * @notes
-	 *
-	 * We could have defined the following types;
-	 *
-	 * ```typescript
-	 * type Children_Pointers<T> = {
-	 *   left?: BTNode<T>
-	 *   right?: BTNode<T>
-	 * }
-	 *
-	 * type Children_Keys<T> = keyof Children_Pointers<T>
-	 * ```
-	 *
-	 * ... and adjusted the function signature to;
-	 *
-	 * ```typescript
-	 * setChild({ label, item }: { label: Children_Keys<T>; item: T | BTNode<T> }): this
-	 * ```
-	 *
-	 * ... but that makes for less readable error messages.
-	 *
-	 * @example
-	 *
-	 * ```javascript
-	 * const root = new BTNode(7)
-	 *   .setChild({
-	 *     label: 'left',
-	 *     item: 23,
-	 *   })
-	 *   .setChild({
-	 *     label: 'right',
-	 *     item: new BTNode(3)
-	 *   })
-	 *
-	 * console.assert(root.children.left.value === 23);
-	 * console.assert(root.children.right.value === 3);
-	 * ```
-	 */
-	setChild({ label, item }: { label: keyof BTNode<T>['children']; item: T | BTNode<T> }): this {
-		if (!Object.keys(this.children).includes(label)) {
-			throw new Error(`Child label/key does not exist for -> ${label}`);
-		}
-
-		if (item instanceof this.constructor) {
-			this.children[label] = item as BTNode<T>;
-		} else {
-			this.children[label] = new (this.constructor as typeof BTNode)(item) as BTNode<T>;
-		}
-		return this;
-	}
-
-	/**
 	 * Implicitly called by `JSON.stringify`, which expects an Object of possibly
 	 * nested primitive values.
 	 *
