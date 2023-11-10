@@ -124,6 +124,47 @@ const raw_tree_04 = BTNode.fromObject({
 	},
 });
 
+/**
+ * @example Sorted binary tree as graph
+ *
+ * ```
+ *                      +----+
+ *                      | 42 |
+ *                      +----+
+ *                     _|    |_
+ *                   _/        \_
+ *                 _/            \_
+ *               _/                \_
+ *          +---+                    +------+
+ *          | 9 |                    | 0x45 |
+ *          +---+                    +------+
+ *         _|    |_                 _|      |_
+ *       _/        \_             _/          \_
+ *   +---+          +----+    +----+           +-----+
+ *   | 5 |          | 18 |    | 52 |           | 420 |
+ *   +---+          +----+    +----+           +-----+
+ * ```
+ */
+const raw_tree_05 = BTNode.fromObject({
+	item: 42,
+	children: {
+		left: {
+			item: 9,
+			children: {
+				left: { item: 5 },
+				right: { item: 18 },
+			},
+		},
+		right: {
+			item: 0x45,
+			children: {
+				left: { item: 52 },
+				right: { item: 420 },
+			},
+		},
+	},
+});
+
 //
 describe('Test binary tree node', () => {
 	it('BTNode.toJSON -- serializes node data and preserves shape when called by `JSON.stringify`', () => {
@@ -260,6 +301,24 @@ describe('Test binary tree walking', () => {
 		expect(tree.compareShapeAndValues({ curr: raw_tree_02, other: raw_tree_03 })).toBeFalsy();
 		expect(tree.compareShapeAndValues({ other: raw_tree_03 })).toBeFalsy();
 		expect(tree.compareShapeAndValues({ curr: raw_tree_02, other: raw_tree_04 })).toBeFalsy();
+	});
+
+	it('Binary_Tree.quickFind -- returns false when item does not exist in tree', () => {
+		const tree = new Binary_Tree(raw_tree_05);
+		const item = 1337;
+		expect(tree.quickFind(item)).toBeFalsy();
+	});
+
+	it('Binary_Tree.quickFind -- returns true when item does exist in tree right branch', () => {
+		const tree = new Binary_Tree(raw_tree_05);
+		const item = 0x45;
+		expect(tree.quickFind(item)).toBeTruthy();
+	});
+
+	it('Binary_Tree.quickFind -- returns true when item does exist in tree left branch', () => {
+		const tree = new Binary_Tree(raw_tree_05);
+		const item = 18;
+		expect(tree.quickFind(item)).toBeTruthy();
 	});
 
 	// it('', () => {});

@@ -412,4 +412,36 @@ export class Binary_Tree<T> {
 			})
 		);
 	}
+
+	/**
+	 * Breadth first searching assumes nodes are sorted with values in ascending
+	 * order, left to right
+	 *
+	 * @notes
+	 *
+	 * - Running time is measured as a range between `O(log n)` to `O(n)`
+	 * - Running time may be shortened to `O(h)` where `h` is tree height
+	 */
+	quickFind(item: T): boolean {
+		return this._quickFind(item, this.root);
+	}
+
+	private _quickFind(item: T, curr?: BTNode<T>): boolean {
+		// base case
+		if (!curr) {
+			return false;
+		}
+
+		if (item === curr.value) {
+			return true;
+		}
+
+		// recurs
+		if (curr.value < item) {
+			return this._quickFind(item, curr.children.right);
+		} else {
+			return this._quickFind(item, curr.children.left);
+		}
+	}
+
 }
