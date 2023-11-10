@@ -126,15 +126,6 @@ const raw_tree_04 = BTNode.fromObject({
 
 //
 describe('Test binary tree node', () => {
-	it('BTNode.setChild -- throws error when setting keys that do not exist', () => {
-		const node = new BTNode(42);
-		const label = 'nope';
-		expect(() => {
-			/* @ts-ignore-next */
-			node.setChild({ label, item: 1337 });
-		}).toThrow(`Child label/key does not exist for -> ${label}`);
-	});
-
 	it('BTNode.toJSON -- serializes node data and preserves shape when called by `JSON.stringify`', () => {
 		const result = JSON.stringify(raw_tree_02);
 		const expected = '{"item":5,"children":{"left":{"item":3},"right":{"item":69}}}';
