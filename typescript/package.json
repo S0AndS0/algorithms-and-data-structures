@@ -17,6 +17,7 @@
   "jest": {
     "verbose": true,
     "testEnvironment": "jsdom",
+    "testEnvironment": "node",
     "roots": [
       "targets/ci-cd"
     ],
