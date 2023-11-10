@@ -23,31 +23,25 @@ import { BTNode, Binary_Tree } from '../binary-tree/binary-tree.js';
  *   +---+          +---+    +----+        +----+
  * ```
  */
-const raw_tree_01 = new BTNode(7)
-	.setChild({
-		label: 'left',
-		item: new BTNode(23)
-			.setChild({
-				label: 'left',
-				item: 5,
-			})
-			.setChild({
-				label: 'right',
-				item: 4,
-			}),
-	})
-	.setChild({
-		label: 'right',
-		item: new BTNode(3)
-			.setChild({
-				label: 'left',
-				item: 18,
-			})
-			.setChild({
-				label: 'right',
-				item: 21,
-			}),
-	});
+const raw_tree_01 = BTNode.fromObject({
+	item: 7,
+	children: {
+		left: {
+			item: 23,
+			children: {
+				left: { item: 5 },
+				right: { item: 4 },
+			},
+		},
+		right: {
+			item: 3,
+			children: {
+				left: { item: 18 },
+				right: { item: 21 },
+			},
+		},
+	},
+});
 
 /**
  * @example Binary tree as graph
@@ -65,15 +59,13 @@ const raw_tree_01 = new BTNode(7)
  *           +---+                  +------+
  * ```
  */
-const raw_tree_02 = new BTNode(5)
-	.setChild({
-		label: 'left',
-		item: 3,
-	})
-	.setChild({
-		label: 'right',
-		item: 0x45,
-	});
+const raw_tree_02 = BTNode.fromObject({
+	item: 5,
+	children: {
+		left: { item: 3 },
+		right: { item: 0x45 },
+	},
+});
 
 /**
  * @example Binary tree as graph
@@ -96,12 +88,16 @@ const raw_tree_02 = new BTNode(5)
  *   +------+
  * ```
  */
-const raw_tree_03 = new BTNode(5).setChild({
-	label: 'left',
-	item: new BTNode(3).setChild({
-		label: 'left',
-		item: 0x45,
-	}),
+const raw_tree_03 = BTNode.fromObject({
+	item: 5,
+	children: {
+		left: {
+			item: 3,
+			children: {
+				left: { item: 0x45 },
+			},
+		},
+	},
 });
 
 /**
@@ -120,15 +116,13 @@ const raw_tree_03 = new BTNode(5).setChild({
  *           +---+                  +-----+
  * ```
  */
-const raw_tree_04 = new BTNode(5)
-	.setChild({
-		label: 'left',
-		item: 3,
-	})
-	.setChild({
-		label: 'right',
-		item: 420,
-	});
+const raw_tree_04 = BTNode.fromObject({
+	item: 5,
+	children: {
+		left: { item: 3 },
+		right: { item: 420 },
+	},
+});
 
 //
 describe('Test binary tree node', () => {
