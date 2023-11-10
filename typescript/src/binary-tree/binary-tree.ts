@@ -444,4 +444,28 @@ export class Binary_Tree<T> {
 		}
 	}
 
+	/**
+	 * Depth first insertion assumes nodes are sorted with values in ascending
+	 * order, left to right
+	 */
+	insert(item: T) {
+		return this._insert(item, this.root);
+	}
+
+	private _insert(item: T, curr: BTNode<T>) {
+		// assume `curr.value >= item`
+		let label = 'left' as keyof BTNode<T>['children'];
+		if (curr.value < item) {
+			label = 'right';
+		}
+
+		if (curr.children[label]) {
+			curr.height++;
+			// recurs
+			this._insert(item, curr.children[label] as BTNode<T>);
+		} else {
+			// base case
+			curr.children[label] = new BTNode(item);
+		}
+	}
 }

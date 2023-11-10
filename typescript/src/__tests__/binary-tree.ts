@@ -321,5 +321,45 @@ describe('Test binary tree walking', () => {
 		expect(tree.quickFind(item)).toBeTruthy();
 	});
 
+	it('Binary_Tree.insert -- successfully inserts to the left', () => {
+		const tree = new Binary_Tree(raw_tree_05);
+		const item = 1;
+
+		/* @ts-ignore next */
+		const height_start = tree.root.height;
+
+		const expected_object = raw_tree_05.toObject();
+		/* @ts-ignore next */
+		expected_object.children.left.children.left.children = { left: { item } };
+
+		tree.insert(item);
+		/* @ts-ignore next */
+		expect(tree.root.toObject()).toStrictEqual(expected_object);
+
+		/* @ts-ignore next */
+		const height_end = tree.root.height;
+		expect(height_end).toBeGreaterThan(height_start);
+	});
+
+	it('Binary_Tree.insert -- successfully inserts to the right', () => {
+		const tree = new Binary_Tree(raw_tree_05);
+		const item = 512;
+
+		/* @ts-ignore next */
+		const height_start = tree.root.height;
+
+		const expected_object = raw_tree_05.toObject();
+		/* @ts-ignore next */
+		expected_object.children.right.children.right.children = { right: { item } };
+
+		tree.insert(item);
+		/* @ts-ignore next */
+		expect(tree.root.toObject()).toStrictEqual(expected_object);
+
+		/* @ts-ignore next */
+		const height_end = tree.root.height;
+		expect(height_end).toBeGreaterThan(height_start);
+	});
+
 	// it('', () => {});
 });
