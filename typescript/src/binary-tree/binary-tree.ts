@@ -19,6 +19,8 @@ type As_Object<T> = {
 /***/
 export class BTNode<T> {
 	value: T;
+	parent: BTNode<T> | undefined;
+	height: number;
 	children: {
 		left?: BTNode<T>;
 		right?: BTNode<T>;
@@ -26,6 +28,8 @@ export class BTNode<T> {
 
 	constructor(item: T) {
 		this.value = item;
+		this.parent = undefined;
+		this.height = 0;
 		this.children = {
 			left: undefined,
 			right: undefined,
@@ -95,28 +99,35 @@ export class BTNode<T> {
 	 *
 	 */
 	static fromObject<T>(object: As_Object<T>): BTNode<T> {
-		return BTNode._fromObject(
-			object,
-			new (this as typeof BTNode)(undefined) as BTNode<T>
-		);
+		return BTNode._fromObject(object, new (this as typeof BTNode)(undefined) as BTNode<T>);
 	}
 
 	private static _fromObject<T>(curr: As_Object<T> | undefined, node: BTNode<T>): BTNode<T> {
+		// base case
 		if (!curr || curr.item === undefined) {
 			return node;
 		}
 
 		node.value = curr.item;
 
+		// recurs
 		if (curr.children && Object.keys(curr.children).length) {
-			node.children = {};
 			if (curr.children.left) {
-				node.children.left = (this as typeof BTNode).fromObject(curr.children.left);
+				node.children.left = (this as typeof BTNode)._fromObject(
+					curr.children.left,
+					new (this as typeof BTNode)(undefined) as BTNode<T>
+				);
 			}
 
 			if (curr.children.right) {
-				node.children.right = (this as typeof BTNode).fromObject(curr.children.right);
+				node.children.right = (this as typeof BTNode)._fromObject(
+					curr.children.right,
+					new (this as typeof BTNode)(undefined) as BTNode<T>
+				);
 			}
+
+			const child_max_hight = Math.max(node.children?.left?.height || 0, node.children?.right?.height || 0);
+			node.height = child_max_hight + 1;
 		}
 
 		return node;
