@@ -199,6 +199,14 @@ describe('Test binary tree node', () => {
 		expect(nodes.toObject()).toStrictEqual(object);
 	});
 
+	it('BTNode.clone -- Creates deep clone of nodes', () => {
+		const root_01 = raw_tree_01.clone();
+		expect(root_01.toObject()).toStrictEqual(raw_tree_01.toObject());
+
+		root_01.value = 1337;
+		expect(root_01.toObject()).not.toStrictEqual(raw_tree_01.toObject());
+	});
+
 	// it('', () => {});
 });
 
@@ -216,7 +224,8 @@ describe('Test binary tree walking', () => {
 
 	it('Binary_Tree.walkPreOrder -- returns list with root at start and right most child at end', () => {
 		const expected = [7, 23, 5, 4, 3, 18, 21];
-		const tree = new Binary_Tree(raw_tree_01);
+		const root_01 = raw_tree_01.clone();
+		const tree = new Binary_Tree(root_01);
 		const result = tree.walkPreOrder();
 		for (const [index, value] of expected.entries()) {
 			expect(result[index]).toBe(value);
@@ -232,7 +241,8 @@ describe('Test binary tree walking', () => {
 
 	it('Binary_Tree.iterPreOrder -- yields values in expected order', () => {
 		const expected = [7, 23, 5, 4, 3, 18, 21];
-		const tree = new Binary_Tree(raw_tree_01);
+		const root_01 = raw_tree_01.clone();
+		const tree = new Binary_Tree(root_01);
 		const iter = tree.iterPreOrder();
 		for (const [index, value] of expected.entries()) {
 			expect(iter.next().value).toBe(value);
@@ -241,7 +251,8 @@ describe('Test binary tree walking', () => {
 
 	it('Binary_Tree.walkInOrder -- returns list with left most child at start, root in middle, and right most child at end', () => {
 		const expected = [5, 23, 4, 7, 18, 3, 21];
-		const tree = new Binary_Tree(raw_tree_01);
+		const root_01 = raw_tree_01.clone();
+		const tree = new Binary_Tree(root_01);
 		const result = tree.walkInOrder();
 		for (const [index, value] of expected.entries()) {
 			expect(result[index]).toBe(value);
@@ -257,7 +268,8 @@ describe('Test binary tree walking', () => {
 
 	it('Binary_Tree.iterInOrder -- yields values in expected order', () => {
 		const expected = [5, 23, 4, 7, 18, 3, 21];
-		const tree = new Binary_Tree(raw_tree_01);
+		const root_01 = raw_tree_01.clone();
+		const tree = new Binary_Tree(root_01);
 		const iter = tree.iterInOrder();
 		for (const [index, value] of expected.entries()) {
 			expect(iter.next().value).toBe(value);
@@ -266,7 +278,8 @@ describe('Test binary tree walking', () => {
 
 	it('Binary_Tree.walkPostOrder -- returns list with left most child at start, root in middle, and right most child at end', () => {
 		const expected = [5, 4, 23, 18, 21, 3, 7];
-		const tree = new Binary_Tree(raw_tree_01);
+		const root_01 = raw_tree_01.clone();
+		const tree = new Binary_Tree(root_01);
 		const result = tree.walkPostOrder();
 		for (const [index, value] of expected.entries()) {
 			expect(result[index]).toBe(value);
@@ -282,7 +295,8 @@ describe('Test binary tree walking', () => {
 
 	it('Binary_Tree.iterPostOrder -- yields values in expected order', () => {
 		const expected = [5, 4, 23, 18, 21, 3, 7];
-		const tree = new Binary_Tree(raw_tree_01);
+		const root_01 = raw_tree_01.clone();
+		const tree = new Binary_Tree(root_01);
 		const iter = tree.iterPostOrder();
 		for (const [index, value] of expected.entries()) {
 			expect(iter.next().value).toBe(value);
@@ -290,45 +304,53 @@ describe('Test binary tree walking', () => {
 	});
 
 	it('Binary_Tree.compareShapeAndValues -- returns true for trees of identical shape and values', () => {
-		const tree = new Binary_Tree(raw_tree_02);
-		expect(tree.compareShapeAndValues({ other: raw_tree_02 })).toBeTruthy();
-		expect(tree.compareShapeAndValues({ curr: raw_tree_02, other: raw_tree_02 })).toBeTruthy();
+		const root_02 = raw_tree_02.clone();
+		const tree = new Binary_Tree(root_02);
+		expect(tree.compareShapeAndValues({ other: root_02 })).toBeTruthy();
+		expect(tree.compareShapeAndValues({ curr: root_02, other: root_02 })).toBeTruthy();
 	});
 
 	it('Binary_Tree.compareShapeAndValues -- returns false for trees without identical shape or values', () => {
-		const tree = new Binary_Tree(raw_tree_02);
+		const root_02 = raw_tree_02.clone();
+		const root_03 = raw_tree_03.clone();
+		const root_04 = raw_tree_04.clone();
+		const tree = new Binary_Tree(root_02);
 		expect(tree.compareShapeAndValues()).toBeFalsy();
-		expect(tree.compareShapeAndValues({ curr: raw_tree_02, other: raw_tree_03 })).toBeFalsy();
-		expect(tree.compareShapeAndValues({ other: raw_tree_03 })).toBeFalsy();
-		expect(tree.compareShapeAndValues({ curr: raw_tree_02, other: raw_tree_04 })).toBeFalsy();
+		expect(tree.compareShapeAndValues({ curr: root_02, other: root_03 })).toBeFalsy();
+		expect(tree.compareShapeAndValues({ other: root_03 })).toBeFalsy();
+		expect(tree.compareShapeAndValues({ curr: root_02, other: root_04 })).toBeFalsy();
 	});
 
 	it('Binary_Tree.quickFind -- returns false when item does not exist in tree', () => {
-		const tree = new Binary_Tree(raw_tree_05);
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
 		const item = 1337;
 		expect(tree.quickFind(item)).toBeFalsy();
 	});
 
 	it('Binary_Tree.quickFind -- returns true when item does exist in tree right branch', () => {
-		const tree = new Binary_Tree(raw_tree_05);
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
 		const item = 0x45;
 		expect(tree.quickFind(item)).toBeTruthy();
 	});
 
 	it('Binary_Tree.quickFind -- returns true when item does exist in tree left branch', () => {
-		const tree = new Binary_Tree(raw_tree_05);
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
 		const item = 18;
 		expect(tree.quickFind(item)).toBeTruthy();
 	});
 
 	it('Binary_Tree.insert -- successfully inserts to the left', () => {
-		const tree = new Binary_Tree(raw_tree_05);
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
 		const item = 1;
 
 		/* @ts-ignore next */
 		const height_start = tree.root.height;
 
-		const expected_object = raw_tree_05.toObject();
+		const expected_object = root_05.toObject();
 		/* @ts-ignore next */
 		expected_object.children.left.children.left.children = { left: { item } };
 
@@ -342,13 +364,14 @@ describe('Test binary tree walking', () => {
 	});
 
 	it('Binary_Tree.insert -- successfully inserts to the right', () => {
-		const tree = new Binary_Tree(raw_tree_05);
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
 		const item = 512;
 
 		/* @ts-ignore next */
 		const height_start = tree.root.height;
 
-		const expected_object = raw_tree_05.toObject();
+		const expected_object = root_05.toObject();
 		/* @ts-ignore next */
 		expected_object.children.right.children.right.children = { right: { item } };
 
