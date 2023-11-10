@@ -126,11 +126,25 @@ export class BTNode<T> {
 				);
 			}
 
-			const child_max_hight = Math.max(node.children?.left?.height || 0, node.children?.right?.height || 0);
+			const child_max_hight = Math.max(
+				node.children?.left?.height || 0,
+				node.children?.right?.height || 0
+			);
 			node.height = child_max_hight + 1;
 		}
 
 		return node;
+	}
+
+	/**
+	 * Attempt to create deep clone of node values
+	 *
+	 * @notes
+	 * - this makes use of `structuredClone` which may not be available on all platforms
+	 */
+	clone(): BTNode<T> {
+		const object = structuredClone(this.toObject());
+		return (this.constructor as typeof BTNode<T>).fromObject(object);
 	}
 }
 
@@ -468,4 +482,79 @@ export class Binary_Tree<T> {
 			curr.children[label] = new BTNode(item);
 		}
 	}
+
+	// /**
+	//  * Depth first deletion assumes nodes are sorted with values in ascending
+	//  * order, left to right
+	//  *
+	//  * @notes
+	//  * - case 1 -> no children, so delete node
+	//  * - case 2 -> one child, so set parent to child of current node
+	//  * - case 3 -> recurs searching for smallest on large (right) side OR recurs
+	//  *   searching for largest on small (left) side
+	//  */
+	// deleteNode(item: T) {
+	// 	return this._deleteNode(item, 'left', this.root)
+	// }
+
+	// private _deleteNode(item: T, label: keyof BTNode<T>['children'], curr?: BTNode<T>) {
+	// 	// base case
+	// 	if (!curr) {
+	// 		return;
+	// 	}
+
+	// 	if (curr.value === item) {
+	// 		if (!curr.children.left && !curr.children.right) {
+	// 			// case 1 -> no children, so delete node
+	// 			curr.parent.children[label] = undefined;
+	// 			curr.parent = undefined;
+	// 			if (curr === this.root) {
+	// 				this.root = undefined
+	// 			}
+	// 		} else if (curr.children.left && curr.children.right) {
+	// 			// - case 3 -> recurs searching for smallest on large (right) side OR
+	// 			//   recurs searching for largest on small (left) side
+	// 			let child;
+	// 			if (curr.children.left.height > curr.children.right.height) {
+	// 				child = this._findLastNode('left', curr.children.right)
+	// 			} else {
+	// 				child = this._findLastNode('right', curr.children.left)
+	// 			}
+
+	// 			curr.parent.children[label] = child;
+	// 			child.parent = curr.parent;
+	// 			if (curr === this.root) {
+	// 				this.root = child
+	// 			}
+	// 			curr.parent = undefined;
+	// 		} else {
+	// 			// case 2 -> one child, so set parent to child of current node
+
+	// 			let child = curr.children.left;
+	// 			if (!child) {
+	// 				child = curr.children.right;
+	// 			}
+
+	// 			curr.parent.children[label] = child;
+	// 			child.parent = curr.parent;
+	// 			if (curr === this.root) {
+	// 				this.root = child
+	// 			}
+	// 			curr.parent = undefined;
+	// 		}
+	// 	} else if (curr.value < item) {
+	// 		// recurs to the right
+	// 		return this._deleteNode(item, 'right', curr.children.right)
+	// 	} else {
+	// 		// recurs to the left
+	// 		return this._deleteNode(item, 'left', curr.children.left)
+	// 	}
+	// }
+
+	// private _findLastNode(label: keyof BTNode<T>['children'], curr: BTNode<T>): BTNode<T> {
+	// 	if (!curr.children[label]) {
+	// 		return curr;
+	// 	}
+	// 	return this._findLastNode(label, curr.children[label] as BTNode<T>);
+	// }
 }
