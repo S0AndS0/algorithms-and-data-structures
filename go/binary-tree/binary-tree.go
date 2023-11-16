@@ -1,16 +1,20 @@
 package binary_tree
 
-type Node_Children[T comparable] struct {
+import "cmp"
+
+type Node_Children[T cmp.Ordered] struct {
 	left  *Node[T]
 	right *Node[T]
 }
 
-type Node[T comparable] struct {
+type Node[T cmp.Ordered] struct {
 	value    T
 	children Node_Children[T]
+	parent   *Node[T]
+	height   uint
 }
 
-type Binary_Tree[T comparable] struct {
+type Binary_Tree[T cmp.Ordered] struct {
 	root *Node[T]
 }
 
@@ -19,7 +23,7 @@ func (tree *Binary_Tree[T]) Walk_Pre_Order(path *[]T) *[]T {
 	return walkPreOrder(tree.root, path)
 }
 
-func walkPreOrder[T comparable](curr *Node[T], path *[]T) *[]T {
+func walkPreOrder[T cmp.Ordered](curr *Node[T], path *[]T) *[]T {
 	// base case
 	if curr == nil {
 		return path
@@ -42,7 +46,7 @@ func (tree *Binary_Tree[T]) Walk_In_Order(path *[]T) *[]T {
 	return walkInOrder(tree.root, path)
 }
 
-func walkInOrder[T comparable](curr *Node[T], path *[]T) *[]T {
+func walkInOrder[T cmp.Ordered](curr *Node[T], path *[]T) *[]T {
 	// base case
 	if curr == nil {
 		return path
@@ -65,7 +69,7 @@ func (tree *Binary_Tree[T]) Walk_Post_Order(path *[]T) *[]T {
 	return walkPostOrder(tree.root, path)
 }
 
-func walkPostOrder[T comparable](curr *Node[T], path *[]T) *[]T {
+func walkPostOrder[T cmp.Ordered](curr *Node[T], path *[]T) *[]T {
 	// base case
 	if curr == nil {
 		return path
@@ -83,11 +87,13 @@ func walkPostOrder[T comparable](curr *Node[T], path *[]T) *[]T {
 	return path
 }
 
+// Recursively, depth first search, comparison of two trees and check both
+// shape and values are the same
 func (tree *Binary_Tree[T]) Compare_Shape_And_Values(other *Binary_Tree[T]) bool {
 	return compareShapeAndValues(tree.root, other.root)
 }
 
-func compareShapeAndValues[T comparable](curr, other *Node[T]) bool {
+func compareShapeAndValues[T cmp.Ordered](curr, other *Node[T]) bool {
 	if curr == nil && other == nil {
 		/* Hit terminus node of both trees */
 		return true
@@ -105,4 +111,31 @@ func compareShapeAndValues[T comparable](curr, other *Node[T]) bool {
 		curr.children.right,
 		other.children.right,
 	)
+}
+
+// Breadth first searching assumes nodes are sorted with values in ascending
+// order, left to right
+//
+// @notes
+//
+// - Running time is measured as a range between `O(log n)` to `O(n)`
+// - Running time may be shortened to `O(h)` where `h` is tree height
+func (tree *Binary_Tree[T]) Quick_Find(item T) bool {
+	return quickFind(item, tree.root)
+}
+
+func quickFind[T cmp.Ordered](item T, curr *Node[T]) bool {
+	if curr == nil {
+		return false
+	}
+
+	if item == curr.value {
+		return true
+	}
+
+	if curr.value < item {
+		return quickFind(item, curr.children.right)
+	} else {
+		return quickFind(item, curr.children.left)
+	}
 }

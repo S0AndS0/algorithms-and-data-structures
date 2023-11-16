@@ -43,6 +43,7 @@ var raw_tree_02 = Node[int]{
 		},
 	},
 }
+
 var raw_tree_03 = Node[int]{
 	value: 5,
 	children: Node_Children[int]{
@@ -51,6 +52,47 @@ var raw_tree_03 = Node[int]{
 			children: Node_Children[int]{
 				left: &Node[int]{
 					value: 0x45,
+				},
+			},
+		},
+	},
+}
+
+var raw_tree_04 = Node[int]{
+	value: 5,
+	children: Node_Children[int]{
+		left: &Node[int]{
+			value: 3,
+		},
+		right: &Node[int]{
+			value: 420,
+		},
+	},
+}
+
+// Sorted binary tree
+var raw_tree_05 = Node[int]{
+	value: 42,
+	children: Node_Children[int]{
+		left: &Node[int]{
+			value: 9,
+			children: Node_Children[int]{
+				left: &Node[int]{
+					value: 5,
+				},
+				right: &Node[int]{
+					value: 18,
+				},
+			},
+		},
+		right: &Node[int]{
+			value: 0x45,
+			children: Node_Children[int]{
+				left: &Node[int]{
+					value: 52,
+				},
+				right: &Node[int]{
+					value: 420,
 				},
 			},
 		},
@@ -138,5 +180,38 @@ func Test_Tree_Compare_Shape_And_Values_returns_false_for_trees_with_different_v
 	result := tree_01.Compare_Shape_And_Values(&tree_02)
 	if result == true {
 		t.Fatalf(`Expected false from comparing different trees`)
+	}
+}
+
+func Test_Tree_Quick_Find_returns_false_when_item_does_not_exist_in_tree(t *testing.T) {
+	tree_05 := Binary_Tree[int]{root: &raw_tree_05}
+
+	item := 1337
+
+	result := tree_05.Quick_Find(item)
+	if result != false {
+		t.Fatalf(`Expected false from searching for non-existent item`)
+	}
+}
+
+func Test_Tree_Quick_Find_returns_true_when_item_does_exist_in_tree_right_branch(t *testing.T) {
+	tree_05 := Binary_Tree[int]{root: &raw_tree_05}
+
+	item := 0x45
+
+	result := tree_05.Quick_Find(item)
+	if result != true {
+		t.Fatalf(`Expected tree from searching for existent item`)
+	}
+}
+
+func Test_Tree_Quick_Find_returns_true_when_item_does_exist_in_tree_left_branch(t *testing.T) {
+	tree_05 := Binary_Tree[int]{root: &raw_tree_05}
+
+	item := 18
+
+	result := tree_05.Quick_Find(item)
+	if result != true {
+		t.Fatalf(`Expected tree from searching for existent item`)
 	}
 }
