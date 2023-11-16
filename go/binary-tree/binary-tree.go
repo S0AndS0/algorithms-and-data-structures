@@ -18,6 +18,25 @@ type Binary_Tree[T cmp.Ordered] struct {
 	root *Node[T]
 }
 
+// Preform depth-first deep clone of node
+func (node *Node[T]) Clone() *Node[T] {
+	target := &Node[T]{}
+	return clone(node, target)
+}
+
+func clone[T cmp.Ordered](node, target *Node[T]) *Node[T] {
+	if node.children.left != nil {
+		target.children.left = &Node[T]{}
+		clone(node.children.left, target.children.left)
+	}
+	if node.children.right != nil {
+		target.children.right = &Node[T]{}
+		clone(node.children.right, target.children.right)
+	}
+	target.value = *&node.value
+	return target
+}
+
 // Mutates `path` by pushing values from recursing `tree.root`
 func (tree *Binary_Tree[T]) Walk_Pre_Order(path *[]T) *[]T {
 	return walkPreOrder(tree.root, path)

@@ -99,6 +99,14 @@ var raw_tree_05 = Node[int]{
 	},
 }
 
+func Test_Node_Clone_creates_deep_clone_of_nodes(t *testing.T) {
+	root_01 := raw_tree_01.Clone()
+	root_01.value = 1337
+	if root_01.value == raw_tree_01.value {
+		t.Fatalf(`Unexpected mutation`)
+	}
+}
+
 func Test_Tree_Walk_Pre_Order(t *testing.T) {
 	expected := [7]int{7, 23, 5, 4, 3, 18, 21}
 
