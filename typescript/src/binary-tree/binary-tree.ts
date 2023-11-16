@@ -102,28 +102,32 @@ export class BTNode<T> {
 		return BTNode._fromObject(object, new (this as typeof BTNode)(undefined) as BTNode<T>);
 	}
 
-	private static _fromObject<T>(curr: As_Object<T> | undefined, node: BTNode<T>): BTNode<T> {
+	private static _fromObject<T>(object: As_Object<T> | undefined, node: BTNode<T>): BTNode<T> {
 		// base case
-		if (!curr || curr.item === undefined) {
+		if (!object || object.item === undefined) {
 			return node;
 		}
 
-		node.value = curr.item;
+		node.value = object.item;
 
 		// recurs
-		if (curr.children && Object.keys(curr.children).length) {
-			if (curr.children.left) {
+		if (object.children && Object.keys(object.children).length) {
+			if (object.children.left) {
 				node.children.left = (this as typeof BTNode)._fromObject(
-					curr.children.left,
+					object.children.left,
 					new (this as typeof BTNode)(undefined) as BTNode<T>
 				);
+
+				node.children.left.parent = node;
 			}
 
-			if (curr.children.right) {
+			if (object.children.right) {
 				node.children.right = (this as typeof BTNode)._fromObject(
-					curr.children.right,
+					object.children.right,
 					new (this as typeof BTNode)(undefined) as BTNode<T>
 				);
+
+				node.children.right.parent = node;
 			}
 
 			const child_max_hight = Math.max(
@@ -152,7 +156,7 @@ export class BTNode<T> {
  *
  */
 export class Binary_Tree<T> {
-	private root: BTNode<T>;
+	private root: BTNode<T> | undefined;
 
 	constructor(root: BTNode<T> | T) {
 		if (root instanceof BTNode) {
@@ -214,7 +218,7 @@ export class Binary_Tree<T> {
 	 *
 	 * @yields {T}
 	 */
-	*iterPreOrder(node: BTNode<T> = this.root): Generator<T, void, unknown> {
+	*iterPreOrder(node: BTNode<T> | undefined = this.root): Generator<T, void, unknown> {
 		if (!(node instanceof BTNode)) {
 			throw new TypeError('Node not an instance of BTNode');
 		}
@@ -288,7 +292,7 @@ export class Binary_Tree<T> {
 	 *
 	 * @yields {T}
 	 */
-	*iterInOrder(node: BTNode<T> = this.root): Generator<T, void, unknown> {
+	*iterInOrder(node: BTNode<T> | undefined = this.root): Generator<T, void, unknown> {
 		if (!(node instanceof BTNode)) {
 			throw new TypeError('Node not an instance of BTNode');
 		}
@@ -362,7 +366,7 @@ export class Binary_Tree<T> {
 	 *
 	 * @yields {T}
 	 */
-	*iterPostOrder(node: BTNode<T> = this.root): Generator<T, void, unknown> {
+	*iterPostOrder(node: BTNode<T> | undefined = this.root): Generator<T, void, unknown> {
 		if (!(node instanceof BTNode)) {
 			throw new TypeError('Node not an instance of BTNode');
 		}
@@ -463,7 +467,7 @@ export class Binary_Tree<T> {
 	 * order, left to right
 	 */
 	insert(item: T) {
-		return this._insert(item, this.root);
+		return this._insert(item, this.root as BTNode<T>);
 	}
 
 	private _insert(item: T, curr: BTNode<T>) {
@@ -483,78 +487,131 @@ export class Binary_Tree<T> {
 		}
 	}
 
-	// /**
-	//  * Depth first deletion assumes nodes are sorted with values in ascending
-	//  * order, left to right
-	//  *
-	//  * @notes
-	//  * - case 1 -> no children, so delete node
-	//  * - case 2 -> one child, so set parent to child of current node
-	//  * - case 3 -> recurs searching for smallest on large (right) side OR recurs
-	//  *   searching for largest on small (left) side
-	//  */
-	// deleteNode(item: T) {
-	// 	return this._deleteNode(item, 'left', this.root)
-	// }
+	/**
+	 * Depth first deletion assumes nodes are sorted with values in ascending
+	 * order, left to right
+	 *
+	 * @notes
+	 * - case 1 -> no children, so delete node
+	 * - case 2 -> one child, so set parent to child of current node
+	 * - case 3 -> recurs searching for smallest on large (right) side OR recurs
+	 *   searching for largest on small (left) side
+	 */
+	delete(item: T): boolean {
+		return this._delete(item, 'left', this.root);
+	}
 
-	// private _deleteNode(item: T, label: keyof BTNode<T>['children'], curr?: BTNode<T>) {
-	// 	// base case
-	// 	if (!curr) {
-	// 		return;
-	// 	}
+	private _delete(item: T, label: keyof BTNode<T>['children'], curr?: BTNode<T>): boolean {
+		// console.log('_delete', { item, label, curr });
+		// base case
+		if (!curr) {
+			return false;
+		}
 
-	// 	if (curr.value === item) {
-	// 		if (!curr.children.left && !curr.children.right) {
-	// 			// case 1 -> no children, so delete node
-	// 			curr.parent.children[label] = undefined;
-	// 			curr.parent = undefined;
-	// 			if (curr === this.root) {
-	// 				this.root = undefined
-	// 			}
-	// 		} else if (curr.children.left && curr.children.right) {
-	// 			// - case 3 -> recurs searching for smallest on large (right) side OR
-	// 			//   recurs searching for largest on small (left) side
-	// 			let child;
-	// 			if (curr.children.left.height > curr.children.right.height) {
-	// 				child = this._findLastNode('left', curr.children.right)
-	// 			} else {
-	// 				child = this._findLastNode('right', curr.children.left)
-	// 			}
+		// recurs to right or left to continue searching for `item`
+		if (curr.value !== item) {
+			if (curr.value < item) {
+				return this._delete(item, 'right', curr.children.right);
+			}
+			return this._delete(item, 'left', curr.children.left);
+		}
 
-	// 			curr.parent.children[label] = child;
-	// 			child.parent = curr.parent;
-	// 			if (curr === this.root) {
-	// 				this.root = child
-	// 			}
-	// 			curr.parent = undefined;
-	// 		} else {
-	// 			// case 2 -> one child, so set parent to child of current node
+		// Early return of `true` when deleting leaves
+		if (!curr.children.left && !curr.children.right) {
+			// case 1 -> no children, so delete node
+			if (curr.parent?.children) {
+				curr.parent.children[label] = undefined;
+			}
 
-	// 			let child = curr.children.left;
-	// 			if (!child) {
-	// 				child = curr.children.right;
-	// 			}
+			if (curr === this.root) {
+				this.root = undefined;
+			}
+			curr.height = 0;
+			this._updateParentHeights(curr.parent);
+			curr.parent = undefined;
+			return true;
+		}
 
-	// 			curr.parent.children[label] = child;
-	// 			child.parent = curr.parent;
-	// 			if (curr === this.root) {
-	// 				this.root = child
-	// 			}
-	// 			curr.parent = undefined;
-	// 		}
-	// 	} else if (curr.value < item) {
-	// 		// recurs to the right
-	// 		return this._deleteNode(item, 'right', curr.children.right)
-	// 	} else {
-	// 		// recurs to the left
-	// 		return this._deleteNode(item, 'left', curr.children.left)
-	// 	}
-	// }
+		if (Boolean(curr.children.left) !== Boolean(curr.children.right)) {
+			// case 2 -> one child so replace `curr` with `child`
+			let child = curr.children.left as BTNode<T>;
+			if (!child) {
+				child = curr.children.right as BTNode<T>;
+			}
 
-	// private _findLastNode(label: keyof BTNode<T>['children'], curr: BTNode<T>): BTNode<T> {
-	// 	if (!curr.children[label]) {
-	// 		return curr;
-	// 	}
-	// 	return this._findLastNode(label, curr.children[label] as BTNode<T>);
-	// }
+			const child_previous_parent = child.parent;
+			(curr.parent as BTNode<T>).children[label] = child;
+			child.parent = curr.parent;
+
+			this._updateParentHeights(child_previous_parent);
+
+			if (curr === this.root) {
+				this.root = child;
+			}
+
+			curr.parent = undefined;
+
+			return true;
+		}
+
+		// - case 3 -> recurs searching for smallest on large (right) side OR
+		//   recurs searching for largest on small (left) side
+		let child: BTNode<T>;
+		let child_label: keyof BTNode<T>['children'] = 'left'
+		if ((curr.children.left as BTNode<T>).height > (curr.children.right as BTNode<T>).height) {
+			child = this._findLastNode(child_label, (curr.children.right as BTNode<T>));
+		} else {
+			child_label = 'right'
+			child = this._findLastNode(child_label, (curr.children.left as BTNode<T>));
+		}
+
+		const child_previous_parent = child.parent;
+		child.children = curr.children;
+		child.parent = curr.parent;
+
+		Object.values(curr.children).forEach((node) => {
+			node.parent = child;
+		});
+
+		if (curr === this.root) {
+			this.root = child;
+		}
+
+		curr.parent = undefined;
+		this._updateParentHeights(child_previous_parent);
+		if (child_previous_parent?.children) {
+			child_previous_parent.children[child_label] = undefined;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Assumes `curr` has at least one child
+	 */
+	private _updateParentHeights(curr: BTNode<T> | undefined): void {
+		// base case one, out of bounds
+		if (!curr) {
+			return;
+		}
+
+		const height = Math.max(curr.children.left?.height || 0, curr.children.right?.height || 0) + 1;
+
+		// // base case two, no update needed
+		// if (height === curr.height) {
+		// 	return;
+		// }
+
+		curr.height = height;
+
+		// recurs
+		return this._updateParentHeights(curr.parent);
+	}
+
+	private _findLastNode(label: keyof BTNode<T>['children'], curr: BTNode<T>): BTNode<T> {
+		if (!curr.children[label]) {
+			return curr;
+		}
+		return this._findLastNode(label, curr.children[label] as BTNode<T>);
+	}
 }

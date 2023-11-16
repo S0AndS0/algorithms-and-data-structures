@@ -166,7 +166,7 @@ const raw_tree_05 = BTNode.fromObject({
 });
 
 //
-describe('Test binary tree node', () => {
+describe('BTNode', () => {
 	it('BTNode.toJSON -- serializes node data and preserves shape when called by `JSON.stringify`', () => {
 		const result = JSON.stringify(raw_tree_02);
 		const expected = '{"item":5,"children":{"left":{"item":3},"right":{"item":69}}}';
@@ -211,7 +211,7 @@ describe('Test binary tree node', () => {
 });
 
 //
-describe('Test binary tree walking', () => {
+describe('Binary_Tree', () => {
 	it('Binary_Tree.constructor -- wraps non BTNode root as instance of BTNode', () => {
 		const root = 42;
 		expect(new Binary_Tree(root)).toBeInstanceOf(Binary_Tree);
@@ -368,20 +368,144 @@ describe('Test binary tree walking', () => {
 		const tree = new Binary_Tree(root_05);
 		const item = 512;
 
-		/* @ts-ignore next */
-		const height_start = tree.root.height;
+		const height_start = root_05.height;
 
 		const expected_object = root_05.toObject();
 		/* @ts-ignore next */
 		expected_object.children.right.children.right.children = { right: { item } };
 
 		tree.insert(item);
-		/* @ts-ignore next */
-		expect(tree.root.toObject()).toStrictEqual(expected_object);
+		expect(root_05.toObject()).toStrictEqual(expected_object);
+
+		const height_end = root_05.height;
+		expect(height_end).toBeGreaterThan(height_start);
+	});
+
+	it('Binary_Tree.delete -- does not modify tree if value does not exist on left branches', () => {
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
+		const item = 1;
+		const expected_object = raw_tree_05.clone().toObject();
+
+		tree.delete(item);
+		expect(root_05.toObject()).toStrictEqual(expected_object);
+	});
+
+	it('Binary_Tree.delete -- does not modify tree if value does not exist on right branches', () => {
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
+		const item = 1337;
+		const expected_object = raw_tree_05.clone().toObject();
+
+		tree.delete(item);
+		expect(root_05.toObject()).toStrictEqual(expected_object);
+	});
+
+	it('Binary_Tree.delete -- removes leaves from left branches', () => {
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
+		const expected_object = raw_tree_05.clone().toObject();
+
+		const leaf_left = 5;
+		tree.delete(leaf_left);
 
 		/* @ts-ignore next */
-		const height_end = tree.root.height;
-		expect(height_end).toBeGreaterThan(height_start);
+		delete expected_object.children.left.children.left;
+		expect(root_05.toObject()).toStrictEqual(expected_object);
+
+		const leaf_right = 18;
+		tree.delete(leaf_right);
+
+		/* @ts-ignore next */
+		delete expected_object.children.left.children;
+		expect(root_05.toObject()).toStrictEqual(expected_object);
+	});
+
+	it('Binary_Tree.delete -- removes leaves from right branches', () => {
+		const root_05 = raw_tree_05.clone();
+		const tree = new Binary_Tree(root_05);
+		const expected_object = raw_tree_05.clone().toObject();
+
+		const leaf_left = 52;
+		tree.delete(leaf_left);
+
+		/* @ts-ignore next */
+		delete expected_object.children.right.children.left;
+		expect(root_05.toObject()).toStrictEqual(expected_object);
+
+		const leaf_right = 420;
+		tree.delete(leaf_right);
+
+		/* @ts-ignore next */
+		delete expected_object.children.right.children;
+		expect(root_05.toObject()).toStrictEqual(expected_object);
+	});
+
+	it('Binary_Tree.delete -- removes root when deleting last leaf', () => {
+		const root = 42;
+		const tree = new Binary_Tree(root);
+		tree.delete(root);
+		/* @ts-ignore next */
+		expect(tree.root).toBeUndefined();
+	});
+
+	it('Binary_Tree.delete -- replaces node with when only left child exists', () => {
+		const root_05 = raw_tree_05.clone();
+		const root_object = root_05.toObject();
+		/* @ts-ignore next */
+		delete root_object.children.left.children.right; //> 18
+		/* @ts-ignore next */
+		const item = root_object.children.left.item; //> 9
+
+		const root = BTNode.fromObject(root_object);
+		const tree = new Binary_Tree(root);
+
+		tree.delete(item as number);
+
+		const expected = structuredClone(root_object);
+		/* @ts-ignore next */
+		expected.children.left = expected.children.left.children.left;
+
+		/* @ts-ignore next */
+		expect(tree.root.toObject()).toEqual(expected);
+	});
+
+	it('Binary_Tree.delete -- replaces node with when only right child exists', () => {
+		const root_05 = raw_tree_05.clone();
+		const root_object = root_05.toObject();
+		/* @ts-ignore next */
+		delete root_object.children.left.children.left; //> 5
+		/* @ts-ignore next */
+		const item = root_object.children.left.item; //> 9
+
+		const root = BTNode.fromObject(root_object);
+		const tree = new Binary_Tree(root);
+
+		tree.delete(item as number);
+
+		const expected = structuredClone(root_object);
+		/* @ts-ignore next */
+		expected.children.left = expected.children.left.children.right;
+
+		/* @ts-ignore next */
+		expect(tree.root.toObject()).toEqual(expected);
+	});
+
+	it('Binary_Tree.delete -- re-parents using the largest from left', () => {
+		const root = raw_tree_05.clone();
+		const root_object = root.toObject();
+		const tree = new Binary_Tree(root);
+		const item = root_object.item; //> 42
+
+		tree.delete(item as number);
+
+		/* @ts-ignore next */
+		root_object.item = root_object.children.left.children.right.item; //> 18
+		/* @ts-ignore next */
+		delete root_object.children.left.children.right;
+
+		/* @ts-ignore next */
+		expect(tree.root.toObject()).toEqual(root_object);
 	});
 
 	// it('', () => {});
