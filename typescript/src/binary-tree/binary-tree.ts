@@ -478,13 +478,15 @@ export class Binary_Tree<T> {
 		}
 
 		if (curr.children[label]) {
-			curr.height++;
-			// recurs
+			// recurs deeper
 			this._insert(item, curr.children[label] as BTNode<T>);
+			//
 		} else {
 			// base case
 			curr.children[label] = new BTNode(item);
 		}
+		// Recursively Propagate height updates to parent(s)
+		this._updateParentHeights(curr);
 	}
 
 	/**
@@ -502,7 +504,6 @@ export class Binary_Tree<T> {
 	}
 
 	private _delete(item: T, label: keyof BTNode<T>['children'], curr?: BTNode<T>): boolean {
-		// console.log('_delete', { item, label, curr });
 		// base case
 		if (!curr) {
 			return false;
@@ -557,12 +558,12 @@ export class Binary_Tree<T> {
 		// - case 3 -> recurs searching for smallest on large (right) side OR
 		//   recurs searching for largest on small (left) side
 		let child: BTNode<T>;
-		let child_label: keyof BTNode<T>['children'] = 'left'
+		let child_label: keyof BTNode<T>['children'] = 'left';
 		if ((curr.children.left as BTNode<T>).height > (curr.children.right as BTNode<T>).height) {
-			child = this._findLastNode(child_label, (curr.children.right as BTNode<T>));
+			child = this._findLastNode(child_label, curr.children.right as BTNode<T>);
 		} else {
-			child_label = 'right'
-			child = this._findLastNode(child_label, (curr.children.left as BTNode<T>));
+			child_label = 'right';
+			child = this._findLastNode(child_label, curr.children.left as BTNode<T>);
 		}
 
 		const child_previous_parent = child.parent;
@@ -597,10 +598,10 @@ export class Binary_Tree<T> {
 
 		const height = Math.max(curr.children.left?.height || 0, curr.children.right?.height || 0) + 1;
 
-		// // base case two, no update needed
-		// if (height === curr.height) {
-		// 	return;
-		// }
+		// base case two, no update needed
+		if (height === curr.height) {
+			return;
+		}
 
 		curr.height = height;
 

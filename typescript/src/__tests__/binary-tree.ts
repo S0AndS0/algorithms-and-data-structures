@@ -368,8 +368,6 @@ describe('Binary_Tree', () => {
 		const tree = new Binary_Tree(root_05);
 		const item = 512;
 
-		const height_start = root_05.height;
-
 		const expected_object = root_05.toObject();
 		/* @ts-ignore next */
 		expected_object.children.right.children.right.children = { right: { item } };
@@ -377,8 +375,14 @@ describe('Binary_Tree', () => {
 		tree.insert(item);
 		expect(root_05.toObject()).toStrictEqual(expected_object);
 
-		const height_end = root_05.height;
-		expect(height_end).toBeGreaterThan(height_start);
+		/* @ts-ignore next */
+		expect(tree.root.children.right.children.right.children.right.height).toBe(0); //> item
+		/* @ts-ignore next */
+		expect(tree.root.children.right.children.right.height).toBe(1); //> 420
+		/* @ts-ignore next */
+		expect(tree.root.children.right.height).toBe(2); //> 0x45
+		/* @ts-ignore next */
+		expect(tree.root.height).toBe(3); //> 42
 	});
 
 	it('Binary_Tree.delete -- does not modify tree if value does not exist on left branches', () => {
