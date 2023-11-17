@@ -189,6 +189,8 @@ ______
 - [GitHub Docs -- Building and testing Go](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go)
 - [GitHub Docs -- Building and testing Node.js](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs)
 - [Frontend Masters -- The Primeagen -- The Last Algorithms Course You'll Need](https://frontendmasters.com/teachers/the-primeagen/)
+- [StackOverflow -- Converting Go struct to JSON](https://stackoverflow.com/questions/8270816/converting-go-struct-to-json)
+- [StackOverflow -- How to decode json into structs](https://stackoverflow.com/questions/24299818/how-to-decode-json-into-structs)
 
 
 ______
