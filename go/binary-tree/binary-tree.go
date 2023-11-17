@@ -1,15 +1,18 @@
 package binary_tree
 
-import "cmp"
+import (
+	"cmp"
+	"encoding/json"
+)
 
 type Node_Children[T cmp.Ordered] struct {
-	left  *Node[T]
-	right *Node[T]
+	Left  *Node[T] `json:"left"`
+	Right *Node[T] `json:"right"`
 }
 
 type Node[T cmp.Ordered] struct {
-	value    T
-	children Node_Children[T]
+	Value    T                `json:"item"`
+	Children Node_Children[T] `json:"children"`
 	parent   *Node[T]
 	height   uint
 }
@@ -25,16 +28,24 @@ func (node *Node[T]) Clone() *Node[T] {
 }
 
 func clone[T cmp.Ordered](node, target *Node[T]) *Node[T] {
-	if node.children.left != nil {
-		target.children.left = &Node[T]{}
-		clone(node.children.left, target.children.left)
+	if node.Children.Left != nil {
+		target.Children.Left = &Node[T]{}
+		clone(node.Children.Left, target.Children.Left)
 	}
-	if node.children.right != nil {
-		target.children.right = &Node[T]{}
-		clone(node.children.right, target.children.right)
+	if node.Children.Right != nil {
+		target.Children.Right = &Node[T]{}
+		clone(node.Children.Right, target.Children.Right)
 	}
-	target.value = *&node.value
+	target.Value = *&node.Value
 	return target
+}
+
+func (node *Node[T]) To_JSON() (string, error) {
+	bytes, err := json.Marshal(node)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
 }
 
 // Mutates `path` by pushing values from recursing `tree.root`
@@ -50,11 +61,11 @@ func walkPreOrder[T cmp.Ordered](curr *Node[T], path *[]T) *[]T {
 
 	// recurs
 	// pre
-	*path = append(*path, curr.value)
+	*path = append(*path, curr.Value)
 
 	// recurs
-	walkPreOrder(curr.children.left, path)
-	walkPreOrder(curr.children.right, path)
+	walkPreOrder(curr.Children.Left, path)
+	walkPreOrder(curr.Children.Right, path)
 
 	// post
 	return path
@@ -75,9 +86,9 @@ func walkInOrder[T cmp.Ordered](curr *Node[T], path *[]T) *[]T {
 	// pre
 
 	// recurs
-	walkInOrder(curr.children.left, path)
-	*path = append(*path, curr.value)
-	walkInOrder(curr.children.right, path)
+	walkInOrder(curr.Children.Left, path)
+	*path = append(*path, curr.Value)
+	walkInOrder(curr.Children.Right, path)
 
 	// post
 	return path
@@ -98,11 +109,11 @@ func walkPostOrder[T cmp.Ordered](curr *Node[T], path *[]T) *[]T {
 	// pre
 
 	// recurs
-	walkPostOrder(curr.children.left, path)
-	walkPostOrder(curr.children.right, path)
+	walkPostOrder(curr.Children.Left, path)
+	walkPostOrder(curr.Children.Right, path)
 
 	// post
-	*path = append(*path, curr.value)
+	*path = append(*path, curr.Value)
 	return path
 }
 
@@ -119,16 +130,16 @@ func compareShapeAndValues[T cmp.Ordered](curr, other *Node[T]) bool {
 	} else if curr == nil || other == nil {
 		/* Hit terminus node of only one tree */
 		return false
-	} else if curr.value != other.value {
+	} else if curr.Value != other.Value {
 		return false
 	}
 
 	return compareShapeAndValues(
-		curr.children.left,
-		other.children.left,
+		curr.Children.Left,
+		other.Children.Left,
 	) && compareShapeAndValues(
-		curr.children.right,
-		other.children.right,
+		curr.Children.Right,
+		other.Children.Right,
 	)
 }
 
@@ -148,13 +159,13 @@ func quickFind[T cmp.Ordered](item T, curr *Node[T]) bool {
 		return false
 	}
 
-	if item == curr.value {
+	if item == curr.Value {
 		return true
 	}
 
-	if curr.value < item {
-		return quickFind(item, curr.children.right)
+	if curr.Value < item {
+		return quickFind(item, curr.Children.Right)
 	} else {
-		return quickFind(item, curr.children.left)
+		return quickFind(item, curr.Children.Left)
 	}
 }

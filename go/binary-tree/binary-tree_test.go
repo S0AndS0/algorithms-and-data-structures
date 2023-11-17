@@ -5,27 +5,27 @@ import (
 )
 
 var raw_tree_01 = Node[int]{
-	value: 7,
-	children: Node_Children[int]{
-		left: &Node[int]{
-			value: 23,
-			children: Node_Children[int]{
-				left: &Node[int]{
-					value: 5,
+	Value: 7,
+	Children: Node_Children[int]{
+		Left: &Node[int]{
+			Value: 23,
+			Children: Node_Children[int]{
+				Left: &Node[int]{
+					Value: 5,
 				},
-				right: &Node[int]{
-					value: 4,
+				Right: &Node[int]{
+					Value: 4,
 				},
 			},
 		},
-		right: &Node[int]{
-			value: 3,
-			children: Node_Children[int]{
-				left: &Node[int]{
-					value: 18,
+		Right: &Node[int]{
+			Value: 3,
+			Children: Node_Children[int]{
+				Left: &Node[int]{
+					Value: 18,
 				},
-				right: &Node[int]{
-					value: 21,
+				Right: &Node[int]{
+					Value: 21,
 				},
 			},
 		},
@@ -33,25 +33,25 @@ var raw_tree_01 = Node[int]{
 }
 
 var raw_tree_02 = Node[int]{
-	value: 5,
-	children: Node_Children[int]{
-		left: &Node[int]{
-			value: 3,
+	Value: 5,
+	Children: Node_Children[int]{
+		Left: &Node[int]{
+			Value: 3,
 		},
-		right: &Node[int]{
-			value: 0x45,
+		Right: &Node[int]{
+			Value: 0x45,
 		},
 	},
 }
 
 var raw_tree_03 = Node[int]{
-	value: 5,
-	children: Node_Children[int]{
-		left: &Node[int]{
-			value: 3,
-			children: Node_Children[int]{
-				left: &Node[int]{
-					value: 0x45,
+	Value: 5,
+	Children: Node_Children[int]{
+		Left: &Node[int]{
+			Value: 3,
+			Children: Node_Children[int]{
+				Left: &Node[int]{
+					Value: 0x45,
 				},
 			},
 		},
@@ -59,40 +59,40 @@ var raw_tree_03 = Node[int]{
 }
 
 var raw_tree_04 = Node[int]{
-	value: 5,
-	children: Node_Children[int]{
-		left: &Node[int]{
-			value: 3,
+	Value: 5,
+	Children: Node_Children[int]{
+		Left: &Node[int]{
+			Value: 3,
 		},
-		right: &Node[int]{
-			value: 420,
+		Right: &Node[int]{
+			Value: 420,
 		},
 	},
 }
 
 // Sorted binary tree
 var raw_tree_05 = Node[int]{
-	value: 42,
-	children: Node_Children[int]{
-		left: &Node[int]{
-			value: 9,
-			children: Node_Children[int]{
-				left: &Node[int]{
-					value: 5,
+	Value: 42,
+	Children: Node_Children[int]{
+		Left: &Node[int]{
+			Value: 9,
+			Children: Node_Children[int]{
+				Left: &Node[int]{
+					Value: 5,
 				},
-				right: &Node[int]{
-					value: 18,
+				Right: &Node[int]{
+					Value: 18,
 				},
 			},
 		},
-		right: &Node[int]{
-			value: 0x45,
-			children: Node_Children[int]{
-				left: &Node[int]{
-					value: 52,
+		Right: &Node[int]{
+			Value: 0x45,
+			Children: Node_Children[int]{
+				Left: &Node[int]{
+					Value: 52,
 				},
-				right: &Node[int]{
-					value: 420,
+				Right: &Node[int]{
+					Value: 420,
 				},
 			},
 		},
@@ -101,8 +101,8 @@ var raw_tree_05 = Node[int]{
 
 func Test_Node_Clone_creates_deep_clone_of_nodes(t *testing.T) {
 	root_01 := raw_tree_01.Clone()
-	root_01.value = 1337
-	if root_01.value == raw_tree_01.value {
+	root_01.Value = 1337
+	if root_01.Value == raw_tree_01.Value {
 		t.Fatalf(`Unexpected mutation`)
 	}
 }
