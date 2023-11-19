@@ -485,8 +485,12 @@ export class Binary_Tree<T> {
 			// base case
 			curr.children[label] = new BTNode(item);
 		}
-		// Recursively Propagate height updates to parent(s)
-		this._updateParentHeights(curr);
+
+		const height = Math.max(curr.children.left?.height || 0, curr.children.right?.height || 0) + 1;
+
+		if (height !== curr.height) {
+			curr.height = height;
+		}
 	}
 
 	/**
@@ -511,10 +515,24 @@ export class Binary_Tree<T> {
 
 		// recurs to right or left to continue searching for `item`
 		if (curr.value !== item) {
+			let result: boolean;
 			if (curr.value < item) {
-				return this._delete(item, 'right', curr.children.right);
+				result = this._delete(item, 'right', curr.children.right);
+			} else {
+				result = this._delete(item, 'left', curr.children.left);
 			}
-			return this._delete(item, 'left', curr.children.left);
+
+			// Maybe update height before bubbling-up result
+			if (result) {
+				const height = Math.max(curr.children.left?.height || 0, curr.children.right?.height || 0) + 1;
+
+				// base case two, no update needed
+				if (height !== curr.height) {
+					curr.height = height;
+				}
+			}
+
+			return result;
 		}
 
 		// Early return of `true` when deleting leaves
@@ -528,7 +546,6 @@ export class Binary_Tree<T> {
 				this.root = undefined;
 			}
 			curr.height = 0;
-			this._updateParentHeights(curr.parent);
 			curr.parent = undefined;
 			return true;
 		}
@@ -544,7 +561,6 @@ export class Binary_Tree<T> {
 			(curr.parent as BTNode<T>).children[label] = child;
 			child.parent = curr.parent;
 
-			this._updateParentHeights(child_previous_parent);
 
 			if (curr === this.root) {
 				this.root = child;
@@ -579,34 +595,11 @@ export class Binary_Tree<T> {
 		}
 
 		curr.parent = undefined;
-		this._updateParentHeights(child_previous_parent);
 		if (child_previous_parent?.children) {
 			child_previous_parent.children[child_label] = undefined;
 		}
 
 		return true;
-	}
-
-	/**
-	 * Assumes `curr` has at least one child
-	 */
-	private _updateParentHeights(curr: BTNode<T> | undefined): void {
-		// base case one, out of bounds
-		if (!curr) {
-			return;
-		}
-
-		const height = Math.max(curr.children.left?.height || 0, curr.children.right?.height || 0) + 1;
-
-		// base case two, no update needed
-		if (height === curr.height) {
-			return;
-		}
-
-		curr.height = height;
-
-		// recurs
-		return this._updateParentHeights(curr.parent);
 	}
 
 	private _findLastNode(label: keyof BTNode<T>['children'], curr: BTNode<T>): BTNode<T> {
